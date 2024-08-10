@@ -1,0 +1,6 @@
+rootProject.name = 'java-pro-spring'
+include 'api'
+include 'backend'
+include 'clients-service'
+include 'limits-service'
+
