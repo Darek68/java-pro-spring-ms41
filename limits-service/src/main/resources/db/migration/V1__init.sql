@@ -8,4 +8,4 @@ create table limits
 );
 
 insert into limits (client_id, balance)
-values (1, 10000.00);
+values (1, 8000.00);
