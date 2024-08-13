@@ -24,6 +24,7 @@ public class AccountsService {
     }
 
     public Optional<Account> findByClientIdAndAccountNumber(Long clientId, String accountNumber) {
+      //  logger.info("findByClientIdAndAccountNumber clientId = {}    accountNumber {}", clientId, accountNumber);
         return accountsRepository.findByClientIdAndAccountNumber(clientId, accountNumber);
     }
 
