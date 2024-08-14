@@ -11,5 +11,5 @@ import java.math.BigDecimal;
 @Data
 public class LimitBalanceRequest {
     private Long clientId;
-    private BigDecimal balance;
+    private BigDecimal limit;
 }

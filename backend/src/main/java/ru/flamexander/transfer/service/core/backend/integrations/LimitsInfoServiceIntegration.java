@@ -29,7 +29,6 @@ public class LimitsInfoServiceIntegration {
             logger.info("getLimitInfo url = {}    custam.. {}", String.format("%s/%d", url, id), 777);
             LimitAmtDto receiverInfo = restTemplate.getForObject(String.format("%s/%d", url, id), LimitAmtDto.class); // http://localhost:8191/api/v1/limits/1
             logger.info("getLimitInfo receiverInfo = {}    custam.. {}", receiverInfo, 777);
-            //   LimitAmtDto receiverInfo = restTemplate.getForObject(String.format("%s/%d", url, id), LimitAmtDto.class); // http://localhost:8191/api/v1/limits/1
             return receiverInfo;
         } catch (ResourceAccessException e) {
             throw new AppLogicException("LIMITSERVICE_NOT_FOUND", "Сервис лимитов временно не доступен");

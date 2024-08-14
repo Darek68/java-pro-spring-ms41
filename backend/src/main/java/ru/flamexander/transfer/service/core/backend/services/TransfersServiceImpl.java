@@ -3,13 +3,13 @@ package ru.flamexander.transfer.service.core.backend.services;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.flamexander.transfer.service.core.api.dtos.ExecuteTransferDtoRequest;
-import ru.flamexander.transfer.service.core.backend.dtos.LimitAmtDto;
 import ru.flamexander.transfer.service.core.backend.entities.Account;
 import ru.flamexander.transfer.service.core.backend.errors.AppLogicException;
-import ru.flamexander.transfer.service.core.backend.integrations.LimitsInfoServiceIntegration;
 import ru.flamexander.transfer.service.core.backend.validators.ExecuteTransferValidator;
 
 import java.math.BigDecimal;
@@ -38,15 +38,22 @@ public class TransfersServiceImpl implements TransfersService {
         Account receiverAccount = accountsService.findByClientIdAndAccountNumber(executeTransferDtoRequest.getReceiverId(), executeTransferDtoRequest.getReceiverAccountNumber()).orElseThrow(() -> new AppLogicException("TRANSFER_TARGET_ACCOUNT_NOT_FOUND", "Перевод невозможен поскольку не существует счет получателяч"));
 
   //     LimitInfoResponseDto limitInfoSender  = restTemplate.getForObject("http://localhost:8191/api/v1/limits/" + clientId, LimitInfoResponseDto.class);
-         BigDecimal limitAmt  = limitsService.getLimitInfo(clientId).getLimit();
-        logger.info("execute limitAmt = {}", limitAmt);
+         BigDecimal oldLimitAmt = limitsService.getLimitInfo(clientId).getLimit();
+        logger.info("execute old limitAmt = {}", oldLimitAmt);
       //  LimitInfoResponseDto limitInfoReciver = restTemplate.getForObject("http://localhost:8191/api/v1/limits/" + executeTransferDtoRequest.getReceiverId(), LimitInfoResponseDto.class);
-        if (executeTransferDtoRequest.getTransferSum().compareTo(limitAmt) > 0) throw new AppLogicException("DAILY_LIMIT_EXCEEDED", "Сумма перевода " + executeTransferDtoRequest.getTransferSum() + " превышает остаток лимита = " + limitAmt);
+        if (executeTransferDtoRequest.getTransferSum().compareTo(oldLimitAmt) > 0) throw new AppLogicException("DAILY_LIMIT_EXCEEDED", "Сумма перевода " + executeTransferDtoRequest.getTransferSum() + " превышает остаток лимита = " + oldLimitAmt);
 
-
+        BigDecimal newLimitAmt = limitsService.setLimitAmt(clientId,oldLimitAmt.subtract(executeTransferDtoRequest.getTransferSum())).getLimit();
+        logger.info("execute new limitAmt = {}", newLimitAmt);
+        try {
         senderAccount.setBalance(senderAccount.getBalance().subtract(executeTransferDtoRequest.getTransferSum()));
         receiverAccount.setBalance(receiverAccount.getBalance().add(executeTransferDtoRequest.getTransferSum()));
-
+        // throw new RuntimeException("test RuntimeException");
+        } catch (RuntimeException e) {
+            newLimitAmt = limitsService.setLimitAmt(clientId,oldLimitAmt).getLimit();
+            logger.info("execute restored limitAmt = {}", newLimitAmt);
+            throw new AppLogicException("TRANSFER_ERROR", "Перевод клиента с id= " + clientId + " на сумму = " + executeTransferDtoRequest.getTransferSum() + " вызвал исключение: " + e.getMessage());
+        }
 
     }
 }

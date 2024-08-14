@@ -29,7 +29,7 @@ public class LimitController {
 
     @PostMapping("set")
     public LimitInfoResponse setLimitBalance(@RequestBody LimitBalanceRequest limitBalanceRequest){
-        logger.info("1 setLimitBalance clientId = {}    balance = {}", limitBalanceRequest.getClientId(),limitBalanceRequest.getBalance());
-        return entityToDto.apply(limitService.setLimitBalanceByClientId(limitBalanceRequest.getClientId(),limitBalanceRequest.getBalance()));
+        logger.info("1 setLimitBalance clientId = {}    balance = {}", limitBalanceRequest.getClientId(),limitBalanceRequest.getLimit());
+        return entityToDto.apply(limitService.setLimitBalanceByClientId(limitBalanceRequest.getClientId(),limitBalanceRequest.getLimit()));
     }
 }
