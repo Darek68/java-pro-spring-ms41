@@ -9,6 +9,7 @@ import ru.flamexander.transfer.service.clients.backend.repository.ClientsReposit
 @Service
 @RequiredArgsConstructor
 public class ClientsService {
+
     private final ClientsRepository clientsRepository;
 
     public Client getClientInfoById(Long id) {

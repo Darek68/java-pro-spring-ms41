@@ -1,6 +1,6 @@
 spring:
   application:
-    name: java-pro-spring
+    name: limits-service
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
@@ -11,9 +11,6 @@ spring:
   data:
     jdbc:
       dialect: postgresql
-
-integrations:
-  clients-info-service:
-    url: "http://localhost:8190/api/v1/clients"
-  limits-info-service:
-    url: "http://localhost:8191/api/v1/limits"
+limits-service:
+  limit:
+    init-balance: 10000.00

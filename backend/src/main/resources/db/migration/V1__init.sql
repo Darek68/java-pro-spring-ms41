@@ -9,4 +9,7 @@ create table accounts
 );
 
 insert into accounts (client_id, account_number, balance)
-values (1, '1234123412341234', 1000);
+values (1, '1234123412341234', 3000);
+
+insert into accounts (client_id, account_number, balance)
+values (2, '1234123412341234', 2000);
