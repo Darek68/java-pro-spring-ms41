@@ -49,7 +49,7 @@ public class TransfersServiceImpl implements TransfersService {
         senderAccount.setBalance(senderAccount.getBalance().subtract(executeTransferDtoRequest.getTransferSum()));
         receiverAccount.setBalance(receiverAccount.getBalance().add(executeTransferDtoRequest.getTransferSum()));
         // throw new RuntimeException("test RuntimeException");
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             newLimitAmt = limitsService.setLimitAmt(clientId,oldLimitAmt).getLimit();
             logger.info("execute restored limitAmt = {}", newLimitAmt);
             throw new AppLogicException("TRANSFER_ERROR", "Перевод клиента с id= " + clientId + " на сумму = " + executeTransferDtoRequest.getTransferSum() + " вызвал исключение: " + e.getMessage());

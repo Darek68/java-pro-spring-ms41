@@ -15,10 +15,8 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class LimitsService {
     private static final Logger logger = LoggerFactory.getLogger(LimitsService.class);
-    private final ClientsInfoServiceIntegration clientsInfoServiceIntegration;
     private final LimitsInfoServiceIntegration limitsInfoServiceIntegration;
 
- //   public ClientInfoResponseDto getClientInfo(Long id) { return clientsInfoServiceIntegration.getClientInfo(id); }
     public LimitAmtDto getLimitInfo(Long id) { return limitsInfoServiceIntegration.getLimitInfo(id);}
 
     public LimitAmtDto setLimitAmt(Long id, BigDecimal amt){return limitsInfoServiceIntegration.setLimit(new LimitAmtDto(id,amt));}

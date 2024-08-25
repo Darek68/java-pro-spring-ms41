@@ -9,3 +9,5 @@ create table limits
 
 insert into limits (client_id, balance)
 values (1, 8000.00);
+insert into limits (client_id, balance)
+values (2, 7000.00);

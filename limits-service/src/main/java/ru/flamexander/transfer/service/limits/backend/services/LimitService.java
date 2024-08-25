@@ -46,17 +46,19 @@ public class LimitService {
         return limitRepository.save(limit);
     }
 
-  //  @Scheduled(cron = "50 21 23 * * ?")
+  //  @Scheduled(cron = "45 00 23 * * ?")
  //   @Scheduled(fixedRate = 7000)
     @Scheduled(cron = "0 0 0 * * ?")
     private void setDefaultLimitsInMidnight() {  // todo взять время срабатывания из property
-        List<Limit> limits = limitRepository.findAll();  // todo сделать в repo нативный запрос на апдейт всех записей != initBalance
-        for (Limit limit : limits) {
-            if (limit.getBalance().compareTo(initBalance) != 0) {
-                limit.setBalance(initBalance);
-                limitRepository.save(limit);
-            }
-        }
-        logger.info("1 setDefaultLimitsInMidnight Scheduled(cron = 0 0 0 * * ?");
+        int countItems = limitRepository.updateAll(initBalance);
+        logger.info("1 setDefaultLimitsInMidnight Scheduled(cron = 0 0 0 * * ?   countItems = {}",countItems);
+//        List<Limit> limits = limitRepository.findAll();  // todo сделать в repo нативный запрос на апдейт всех записей != initBalance
+//        for (Limit limit : limits) {
+//            if (limit.getBalance().compareTo(initBalance) != 0) {
+//                limit.setBalance(initBalance);
+//                limitRepository.save(limit);
+//            }
+//        }
+//        logger.info("1 setDefaultLimitsInMidnight Scheduled(cron = 0 0 0 * * ?");
     }
 }
